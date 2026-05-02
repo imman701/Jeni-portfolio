@@ -2,6 +2,8 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-scroll';
 import profileImg from '../assets/profile.jpeg';
+import cvPdf from '../assets/jenisha-cv.pdf';
+
 
 const About = () => {
   return (
@@ -71,7 +73,8 @@ const About = () => {
 
             <div className="flex space-x-4">
               <a 
-                href="/jenisha-cv.pdf" 
+                href={cvPdf} 
+                download="Jenisha_CV.pdf"
                 target="_blank"
                 className="px-6 py-3 rounded-lg bg-primary hover:bg-blue-600 text-white font-medium transition-colors"
               >
