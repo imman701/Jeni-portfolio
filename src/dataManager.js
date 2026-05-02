@@ -6,42 +6,42 @@ const DEFAULT_PROJECTS = [
     id: 'p1', 
     title: 'Perfumo – Perfume Shopping App', 
     desc: 'Redesigned the complete mobile experience for a perfume shopping app, focusing on visual luxury, clean layouts, and simplified navigation.', 
-    img: '../src/assets/perfumo.png', 
+    img: '/perfumo.png', 
     link: 'https://www.figma.com/proto/Hoe0KKpuyYiaXWT1uXKTd4/proj1?node-id=103-299&page-id=0%3A1&starting-point-node-id=103%3A299&t=Jn17M6mfT8isyeuv-1' 
   },
   { 
     id: 'p2', 
     title: '🍴 Yumzy – Food Delivery App', 
     desc: 'Created a vibrant and intuitive food delivery app interface with modern visuals, smooth interactions, and an easy-to-use ordering flow.', 
-    img: '../src/assets/yumzy.png', 
+    img: '/yumzy.png', 
     link: 'https://www.figma.com/proto/xy7hEo7ncSr062mBG7zBZ0/proj-2?node-id=54-17&p=f&viewport=215%2C220%2C0.33&t=xzfhe4GGasLHlPJn-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=2%3A2&page-id=0%3A1' 
   },
   { 
     id: 'p3', 
     title: '🌱 Tree Care App – Plant Tracking', 
     desc: 'Design a mobile app for plant care enthusiasts to track plant health, get watering reminders, and identify plant species.', 
-    img: '../src/assets/tree.png', 
+    img: '/tree.png', 
     link: 'https://www.figma.com/proto/zXW3UrXF8vSzlvRkbRmVGe/Untitled?page-id=0%3A1&node-id=3-2&p=f&m=draw&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=3%3A2&t=X5V5WkUoWdALH3RZ-1' 
   },
   { 
     id: 'p4', 
     title: '💊 MediCare – Medicine Reminder App', 
     desc: 'A mobile app designed to help users remember and manage their medication schedules.', 
-    img: '../src/assets/medicine.png', 
+    img: '/medicine.png', 
     link: 'https://www.figma.com/proto/zeZubceof0cnIXfRZRl6LS/Untitled?page-id=0%3A1&node-id=4-2&p=f&viewport=117%2C181%2C0.63&t=C0c36cObAhDO2j53-1&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=4%3A2' 
   },
   { 
     id: 'p5', 
     title: 'Student Dashboard-UI', 
     desc: 'A modern dashboard for students to track their academic progress and engage with campus life.', 
-    img: '../src/assets/student-dashborad.png', 
+    img: '/student-dashborad.png', 
     link: '#' 
   },
   { 
     id: 'p6', 
     title: 'Poster-UI', 
     desc: 'Posters are designed to grab attention, communicate quickly, and create a lasting impression. Each poster is crafted with a specific goal in mind, whether it’s to promote an event, share information, or celebrate a moment. By combining strong visuals, strategic layouts, and clear typography, these designs aim to deliver their message effectively and memorably. ', 
-    img: '../src/assets/Poster-UI.png',
+    img: '/Poster-UI.png',
     link: '#' 
   },
 ];
@@ -50,27 +50,27 @@ const DEFAULT_CERTS = [
   { 
     id: 'c1', 
     title: 'UI/UX Design Professional Certificate', 
-    img: '../src/assets/certi1.jpeg' 
+    img: '/certi1.jpeg' 
   },
   { 
     id: 'c2', 
     title: 'Web Development Associate Certificate', 
-    img: '../src/assets/certi2.jpeg' 
+    img: '/certi2.jpeg' 
   },
   {
     id:'c3',
     title:"Internship UI/UX Certificate",
-    img:"../src/assets/certi3.jpeg"
+    img:"/certi3.jpeg"
   },
   {
     id:'c4',
     title:"Graphics Design Certificate",
-    img:"../src/assets/certi4.jpeg"
+    img:"/certi4.jpeg"
   },
   {
     id:'c5',
     title:"Adobe XD Certificate",
-    img:"../src/assets/certi5.jpeg"
+    img:"/certi5.jpeg"
   }
 ];
 
@@ -87,8 +87,28 @@ const DEFAULT_TECH = [
 
 // Initialization
 export const initData = () => {
-  if (!localStorage.getItem('projects')) localStorage.setItem('projects', JSON.stringify(DEFAULT_PROJECTS));
-  if (!localStorage.getItem('certificates')) localStorage.setItem('certificates', JSON.stringify(DEFAULT_CERTS));
+  const migrate = (key, defaultData) => {
+    const existing = localStorage.getItem(key);
+    if (!existing) {
+      localStorage.setItem(key, JSON.stringify(defaultData));
+    } else {
+      try {
+        const parsed = JSON.parse(existing);
+        const migrated = parsed.map(item => {
+          if (item.img && typeof item.img === 'string' && item.img.startsWith('../src/assets/')) {
+            return { ...item, img: item.img.replace('../src/assets/', '/') };
+          }
+          return item;
+        });
+        localStorage.setItem(key, JSON.stringify(migrated));
+      } catch (e) {
+        localStorage.setItem(key, JSON.stringify(defaultData));
+      }
+    }
+  };
+
+  migrate('projects', DEFAULT_PROJECTS);
+  migrate('certificates', DEFAULT_CERTS);
   if (!localStorage.getItem('techStack')) localStorage.setItem('techStack', JSON.stringify(DEFAULT_TECH));
 }
 

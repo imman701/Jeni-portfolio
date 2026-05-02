@@ -71,7 +71,7 @@ const About = () => {
 
             <div className="flex space-x-4">
               <a 
-                href="../src/assets/jenisha-cv.pdf" 
+                href="/jenisha-cv.pdf" 
                 target="_blank"
                 className="px-6 py-3 rounded-lg bg-primary hover:bg-blue-600 text-white font-medium transition-colors"
               >
